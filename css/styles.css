@@ -3,16 +3,191 @@
     padding: 0;
     box-sizing: border-box;
 }
-body{
-    width: 100%;
-    font-family: 'poppins', sans-serif;
+
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f4f4f9;
+    color: #333;
+    line-height: 1.6;
 }
+
 :root{
     --primary-color: #3e8e41;
     --secondary-color: #2b2b2b;
     --background-color: #f4f4f9;
     --text-color: #333;
     --text-color2: #ffffff;
+}
+/* ---------------dashboard--------------- */
+header {
+    background-color: var(--primary-color);
+    color: white;
+    padding: 1rem 0;
+    text-align: center;
+}
+.header-container{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    text-transform: capitalize;
+    padding: 0 100px;
+}
+header h1 {
+    font-size: 2.5rem;
+}
+
+nav ul {
+    list-style-type: none;
+    padding: 0;
+}
+
+nav ul li {
+    display: inline;
+    margin: 0 15px;
+}
+
+nav ul li a {
+    color: var(--text-color2);
+    text-decoration: none;
+    font-size: 1.1rem;
+    position:relative;
+}
+nav ul li a::after{
+    content:"";
+    width: 0;
+    height: 2px;
+    background:var(--background-color);
+    position: absolute;
+    left:0;
+    bottom:-4px;
+    transition: width 0.25s;
+}
+nav ul li a:hover::after{
+    width:100%;
+}
+button{
+    padding: 14px 24px;
+    border: none;
+    border-radius: 4px;
+    font-size: 16px;
+    font-weight: 500;
+    background: var(--primary-color);
+    color: var(--text-color2);
+    transition: background 0.5s;
+    text-transform: capitalize;
+    cursor: pointer;
+}
+button:hover{
+    background: #43b346;
+}
+.header-buttons{
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+.signup, .signin{
+    background: #43b346;
+}
+.signin:hover,
+.signup:hover
+{
+    background: #50eb55;
+}
+
+main {
+    padding: 20px;
+}
+
+.intro {
+    text-align: center;
+    margin-bottom: 40px;
+}
+
+.features {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 20px;
+}
+
+.feature {
+    background-color: white;
+    padding: 20px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
+    cursor: pointer;
+    transition: transform 0.5s;
+}
+
+.feature h3 {
+    color: #3e8e41;
+    font-size: 1.5rem;
+    margin-bottom: 10px;
+}
+.feature:hover{
+    transform: translate(12px, 5px);
+}
+/* -------------footer--------------- */
+footer {
+    text-align: center;
+    padding: 10px;
+    background-color: #3e8e41;
+    color: white;
+}
+/* ----------------------index page ------------------------*/
+.hero-container{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding-top: 40px;
+    flex-wrap: wrap;
+    gap: 18px;
+    padding-bottom: 24px;
+}
+.hero-text{
+    width: 500px;
+}
+.hero-text h1{
+    font-size: 46px;
+    margin-bottom: 12px;
+}
+.hero-text h1 span{
+    color: var(--primary-color);
+}
+
+.hero-image{
+    width: 500px;
+    height: 400px;
+}
+.hero-image img{
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+}
+
+.overview-container{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 24px;
+    padding: 60px 0;
+}
+.overview-image{
+    width: 400px;
+    height: 400px;
+}
+.overview-image img{
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+}
+.overview-text{
+    width: 500px;
+}
+.overview-text h2{
+    margin-bottom: 16px;
+    color: var(--primary-color);
 }
 /* -----------login page------------ */
 .form-container{
@@ -47,13 +222,14 @@ form h4{
     margin-bottom: 14px;
     font-size: 16px;
     border-radius: 4px;
+    background: transparent;
 }
 .form-group .formButton{
     background: var(--primary-color);
     color: var(--text-color2);
     font-size: 18px;
     font-weight: 500;
-    transition: background 0.5s;
+    transition: all 0.5s;
 }
 .btn{
     width: 100%;
@@ -66,6 +242,7 @@ form h4{
 }
 form p{
     font-size: 14px;
+    margin-top: 16px;
 }
 form p a{
     text-decoration: none;
@@ -102,6 +279,9 @@ form a:hover{
 }
 .upload-file-container h1{
     margin-bottom: 16px;
+    font-size: 36px;
+    color: #2b2b2b;
+    margin-bottom: 12px;
 }
 .search{
     width: 50%;
@@ -114,7 +294,7 @@ form a:hover{
 }
 table{
     width: 100%;
-    border: 1px solid red;
+    /* border: 1px solid red; */
     table-layout: fixed;
     text-align: left;
     border-collapse: collapse;
@@ -136,6 +316,39 @@ tr:nth-child(even){
 tr:nth-child(odd){
     background: white;
 }
+
+/* ----------------upload assignments--------------------- */
+.uploading-form{
+    width: 100%;
+}
+.upload-file-container label{
+    display: block;
+    font-size: 18px;
+    font-weight: 500;
+    color: #2b2b2b;
+}
+.upload-file-container input{
+    display: block;
+    width: 80%;
+    border: 1px solid #e0dede;
+    margin-bottom: 16px;
+    margin-top: 8px;
+}
+input[type = 'file']::file-selector-button{
+    padding: 14px 24px;
+    font-size: 16px;
+    outline: none;
+    border: none;
+    background: #ccc;
+
+}
+input[type = 'text']{
+    padding: 14px 24px;
+    font-size: 16px;
+    outline: none;
+    border: 1px solid #ccc;
+    background: transparent;
+}
 button{
     padding: 14px 24px;
     border: none;
@@ -145,8 +358,6 @@ button{
     background: var(--primary-color);
     color: var(--text-color2);
     transition: background 0.5s;
-    text-transform: capitalize;
-    cursor: pointer;
 }
 button:hover{
     background: #43b346;
