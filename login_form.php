@@ -1,32 +1,30 @@
 <?php
-include "./connect.php";
+include "conn.php";
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     // Get user input
-    $email = mysqli_real_escape_string($conn, $_POST['email']);
+    $email = $_POST['email'];
     $password = $_POST['password'];
 
-    // Check if user exists in the database
-    $sql = "SELECT * FROM users WHERE email = '$email'";
-    $result = $conn->query($sql);
+    // Prepare and execute the query to check if the user exists in the database
+    $sql = "SELECT * FROM users_credentials WHERE email = ?";
+    $stmt = $conn->prepare($sql);
+    $stmt->execute([$email]);
+    $user = $stmt->fetch(PDO::FETCH_ASSOC);
     
-    if ($result->num_rows > 0) {
-        $user = $result->fetch_assoc();
-        
+    if ($user) {
         // Verify password
         if (password_verify($password, $user['password'])) {
             // Login successful
             session_start();
             $_SESSION['user_id'] = $user['id'];
-            $_SESSION['user_type'] = $user['user_type'];
+            $_SESSION['role'] = $user['role'];
 
             // Redirect based on user type
-            if ($user['user_type'] == 'admin') {
-                header('Location: ../Admin Dashboard/admin_dashboard.php');
-            } elseif ($user['user_type'] == 'teacher') {
-                header('Location: ../Dashboard/uploaded_files.php');
-            } elseif ($user['user_type'] == 'parent') {
-                header('Location: ../Dashboard/uploaded_files.php');
+            if ($user['role'] == 'admin') {
+                header('Location: admin_dashboard.php');
+            } elseif ($user['role'] == 'teacher' || $user['role'] == 'parent') {
+                header('Location: dashboard.php');
             }
         } else {
             echo "Incorrect password!";
@@ -34,8 +32,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     } else {
         echo "No user found with that email!";
     }
-
-    $conn->close();
 }
 ?>
 
@@ -52,7 +48,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     <section>
         <div class="form-container">
-            <form action="login.php" method="post">
+            <form action="login_form.php" method="post">
                 <h1>Login</h1>
                 <div class="form-group">
                     <label for="email">Email:</label>

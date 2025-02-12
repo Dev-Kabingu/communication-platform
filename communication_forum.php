@@ -67,8 +67,8 @@ function display_posts($posts, $parent_id = 0, $indent = 0) {
             if ($reply_count > 1) {
                 echo '<button class="view-replies-button" data-post-id="' . $post['id'] . '" style="margin-left: 40px;">View All Replies (' . ($reply_count - 1) . ' more)</button>';
             }
-            echo '</div>';  // Close replies container
-            echo '</div>';  // Close post container
+            echo '</div>';  
+            echo '</div>'; 
         }
     }
 }

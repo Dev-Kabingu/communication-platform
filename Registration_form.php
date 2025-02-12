@@ -1,15 +1,15 @@
 <?php
-include "./connect.php";
+include "conn.php";
 
-//store the error messages
+// Store the error messages
 $email_error = "";
 $password_error = "";
 $confirm_password_error = "";
 
 $error = false;
 
-// check form submission
-if ($_SERVER['REQUEST_METHOD'] == 'POST'){
+// Check form submission
+if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $name = isset($_POST['name']) ? htmlspecialchars(trim($_POST['name'])) : '';
     $email = isset($_POST['email']) ? htmlspecialchars(trim($_POST['email'])) : '';
     $user_type = isset($_POST['user-type']) ? htmlspecialchars(trim($_POST['user-type'])) : '';
@@ -18,47 +18,46 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST'){
 
     $hash_password = password_hash($password, PASSWORD_BCRYPT);
 
-    // check if user exists
-    $user_exist = "select * from users where email = ?";
-     $sql = mysqli_prepare($conn, $user_exist);
-     mysqli_stmt_bind_param($sql, 's', $email);
-     mysqli_stmt_execute($sql);
-     $results = mysqli_stmt_get_result($sql);
+    // Check if user exists
+    $user_exist = "SELECT * FROM users_credentials WHERE email = ?";
+    $stmt = $conn->prepare($user_exist);
+    $stmt->execute([$email]);
+    $results = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
-     if(mysqli_num_rows($results) > 0){
+    if (count($results) > 0) {
         $email_error = "User Already Exist";
         $error = true;
-     }else{
-        // validate data before inserting to the database
-        if(strlen($password) <8 ){
-            $password_error = 'Password must be more than 8 character';
+    } else {
+        // Validate data before inserting into the database
+        if (strlen($password) < 8) {
+            $password_error = 'Password must be more than 8 characters';
             $error = true;
-        }elseif($confirm_password != $password){
-            $confirm_password_error = "Password do not match";
+        } elseif ($confirm_password != $password) {
+            $confirm_password_error = "Passwords do not match";
             $error = true;
-        }elseif(!filter_var($email, FILTER_VALIDATE_EMAIL)){
+        } elseif (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
             $email_error = 'Unsupported email format';
             $error = true;
         }
-        // if there are no errors
-        if(!$error){
-            $sql_insert = "insert into users (fullname, email, user_type, password)
-              values(?, ?, ?, ?)";
-              $stmt = mysqli_prepare($conn, $sql_insert);
-              mysqli_stmt_bind_param($stmt, 'ssss', $name, $email, $user_type, $hash_password);
-              mysqli_stmt_execute($stmt);
-              $results = mysqli_stmt_get_result($stmt);
 
-              if($results){
+        // If there are no errors
+        if (!$error) {
+            $sql_insert = "INSERT INTO users_credentials (full_name, email, role, password)
+                           VALUES (?, ?, ?, ?)";
+            $stmt = $conn->prepare($sql_insert);
+            $stmt->execute([$name, $email, $user_type, $hash_password]);
+
+            if ($stmt->rowCount() > 0) {
                 echo "Registration successful";
-                header ("Location: login_form.php");
-              }
+                header("Location: login_form.php");
+                exit();
+            }
         }
-    
-        
-     }
+    }
 }
 ?>
+
+
 
 <!DOCTYPE html>
 <html lang="en">
@@ -72,7 +71,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST'){
 
     <section>
         <div class="form-container registration-form">
-            <form action="register.php" method="post">
+            <form action="Registration_form.php" method="post">
                 <h1>Register</h1>
                 <div class="form-group">
                     <label for="name">Full Name:</label>
