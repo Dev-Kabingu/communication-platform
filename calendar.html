@@ -1,0 +1,248 @@
+<!-- calendar.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Event Calendar</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-color: #f4f4f4;
+        }
+        
+        .calendar {
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 5px;
+            box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        
+        h2 {
+            font-size: 24px;
+            margin-bottom: 20px;
+        }
+        
+        h3 {
+            font-size: 20px;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+        
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            text-align: center;
+        }
+        
+        th, td {
+            width: 14.28%;
+            height: 60px;
+            padding: 10px;
+            text-align: center;
+        }
+        
+        th {
+            background-color: #f4f4f4;
+            font-weight: bold;
+        }
+        
+        td {
+            background-color: #e9e9e9;
+            border: 1px solid #ddd;
+            cursor: pointer;
+        }
+        
+        td:hover {
+            background-color: #ddd;
+        }
+        
+        button.day-btn {
+            background: none;
+            border: none;
+            font-size: 18px;
+            color: #333;
+            cursor: pointer;
+        }
+        
+        button.day-btn:hover {
+            background-color: #007bff;
+            color: white;
+        }
+        
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgba(0, 0, 0, 0.4);
+            padding-top: 60px;
+        }
+        
+        .modal-content {
+            background-color: #fff;
+            margin: 5% auto;
+            padding: 20px;
+            border: 1px solid #888;
+            width: 80%;
+            max-width: 500px;
+            border-radius: 5px;
+        }
+        
+        .close-btn {
+            color: #aaa;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+        }
+        
+        .close-btn:hover,
+        .close-btn:focus {
+            color: black;
+            text-decoration: none;
+            cursor: pointer;
+        }
+        
+        form {
+            margin-top: 20px;
+        }
+        
+        input[type="date"],
+        input[type="text"] {
+            width: 100%;
+            padding: 10px;
+            margin: 10px 0;
+            font-size: 16px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+        
+        button[type="submit"] {
+            background-color: #4CAF50;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            cursor: pointer;
+            font-size: 16px;
+            width: 100%;
+            border-radius: 4px;
+        }
+        
+        button[type="submit"]:hover {
+            background-color: #45a049;
+        }
+        
+    </style>
+</head>
+<body>
+    <div class="calendar">
+        <h2>School Event Calendar</h2>
+        <div id="calendar"></div>
+
+        <!-- Event Modal -->
+        <div id="eventModal" class="modal">
+            <div class="modal-content">
+                <span class="close-btn">&times;</span>
+                <h3>Add Event</h3>
+                <form id="eventForm">
+                    <label for="eventDate">Date:</label>
+                    <input type="date" id="eventDate" required><br><br>
+                    <label for="eventTitle">Event Title:</label>
+                    <input type="text" id="eventTitle" required><br><br>
+                    <button type="submit">Add Event</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // script.js (For Calendar)
+document.addEventListener("DOMContentLoaded", function () {
+    const calendarDiv = document.getElementById("calendar");
+    let currentMonth = new Date().getMonth();
+    const monthNames = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+
+    // Function to generate calendar view
+    function generateCalendar(month) {
+        let date = new Date();
+        date.setMonth(month);
+
+        const firstDay = new Date(date.getFullYear(), month, 1);
+        const lastDay = new Date(date.getFullYear(), month + 1, 0);
+        const totalDays = lastDay.getDate();
+
+        let calendarHTML = `<h3>${monthNames[month]} ${date.getFullYear()}</h3><table><tr>`;
+        
+        for (let i = 0; i < 7; i++) {
+            calendarHTML += `<th>${["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"][i]}</th>`;
+        }
+
+        calendarHTML += "</tr><tr>";
+
+        for (let i = 0; i < firstDay.getDay(); i++) {
+            calendarHTML += "<td></td>";
+        }
+
+        for (let day = 1; day <= totalDays; day++) {
+            if ((day + firstDay.getDay()) % 7 == 0) {
+                calendarHTML += "</tr><tr>";
+            }
+            calendarHTML += `<td><button class="day-btn">${day}</button></td>`;
+        }
+
+        calendarHTML += "</tr></table>";
+        calendarDiv.innerHTML = calendarHTML;
+    }
+
+    generateCalendar(currentMonth);
+
+    // Add event form modal
+    const modal = document.getElementById("eventModal");
+    const closeModalBtn = document.getElementsByClassName("close-btn")[0];
+    const eventForm = document.getElementById("eventForm");
+
+    closeModalBtn.onclick = function () {
+        modal.style.display = "none";
+    };
+
+    eventForm.onsubmit = function (e) {
+        e.preventDefault();
+        const eventDate = document.getElementById("eventDate").value;
+        const eventTitle = document.getElementById("eventTitle").value;
+
+        fetch("add_event.php", {
+            method: "POST",
+            body: new URLSearchParams({
+                eventDate: eventDate,
+                eventTitle: eventTitle
+            }),
+            headers: {
+                "Content-Type": "application/x-www-form-urlencoded"
+            }
+        })
+        .then(response => response.text())
+        .then(data => {
+            alert(data); // Success message
+            modal.style.display = "none";
+        });
+    };
+
+    // Show modal when a day is clicked
+    document.querySelectorAll(".day-btn").forEach(button => {
+        button.onclick = function () {
+            modal.style.display = "block";
+        };
+    });
+});
+
+    </script>
+</body>
+</html>

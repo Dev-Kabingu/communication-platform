@@ -1,0 +1,119 @@
+<!-- announcements.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Announcements & Notifications</title>
+   <style>
+    /* styles.css */
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 20px;
+    background-color: #f4f4f4;
+}
+
+.notifications {
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 5px;
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+h2 {
+    font-size: 24px;
+    margin-bottom: 10px;
+}
+
+ul {
+    list-style-type: none;
+    padding: 0;
+}
+
+li {
+    background-color: #eef;
+    margin-bottom: 10px;
+    padding: 10px;
+    border-radius: 5px;
+    font-size: 18px;
+}
+
+textarea {
+    width: 100%;
+    padding: 10px;
+    margin: 10px 0;
+    font-size: 16px;
+}
+
+button {
+    background-color: #4CAF50;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    cursor: pointer;
+    font-size: 16px;
+}
+
+button:hover {
+    background-color: #45a049;
+}
+
+   </style>
+</head>
+<body>
+    <div class="notifications">
+        <h2>School Announcements</h2>
+        <ul id="announcement-list">
+            <!-- Announcements will be dynamically loaded here -->
+        </ul>
+    </div>
+
+    <!-- Add new announcement -->
+    <form id="announcementForm">
+        <textarea id="announcement" rows="4" placeholder="Enter a new announcement" required></textarea>
+        <button type="submit">Add Announcement</button>
+    </form>
+
+    <script>
+        // script.js (For Announcements)
+document.addEventListener("DOMContentLoaded", function () {
+    const announcementList = document.getElementById("announcement-list");
+
+    // Fetch existing announcements from the backend (get_announcements.php)
+    fetch("get_announcements.php")
+        .then(response => response.json())
+        .then(data => {
+            data.forEach(announcement => {
+                const listItem = document.createElement("li");
+                listItem.textContent = announcement.message;
+                announcementList.appendChild(listItem);
+            });
+        });
+
+    // Submit new announcement
+    const announcementForm = document.getElementById("announcementForm");
+    announcementForm.addEventListener("submit", function (e) {
+        e.preventDefault();
+        const announcementText = document.getElementById("announcement").value;
+
+        fetch("add_announcement.php", {
+            method: "POST",
+            body: new URLSearchParams({
+                announcement: announcementText
+            }),
+            headers: {
+                "Content-Type": "application/x-www-form-urlencoded"
+            }
+        })
+        .then(response => response.text())
+        .then(data => {
+            alert(data); // Success message
+            window.location.reload(); // Reload to show the new announcement
+        });
+    });
+});
+
+    </script>
+</body>
+</html>

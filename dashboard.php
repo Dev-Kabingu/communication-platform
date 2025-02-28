@@ -14,8 +14,9 @@
             <ul>
                 <li><a href="index.html">Home</a></li>
                 <li><a href="login_communication_forum.php" >Messages</a></li>
-                <li><a href="#">Notifications</a></li>
+                <li><a href="view_notification.php">Notifications</a></li>
                 <li><a href="uploaded_files.php">Assignments</a></li>
+               <li> <a href="view_event.php">Upcoming Events</a></li>
                 <li><a href="#">Guides</a></li>
             </ul>
         </nav>
@@ -31,18 +32,26 @@
             <div class="feature">
                 <h3>Messages</h3>
                 <p>Send and receive messages between parents and teachers.</p>
+                <a href="login_communication_forum.php">View Messages</a>
             </div>
             <div class="feature">
                 <h3>Notifications</h3>
                 <p>Stay updated with important events and notices from the teacher.</p>
+                <a href="view_notification.php"> Notifications</a>
             </div>
             <div class="feature">
                 <h3>Assignments</h3>
                 <p>View and submit assignments posted by the teacher.</p>
+                <a href="uploaded_files.php">View Assignments</a>
             </div>
             <div class="feature">
                 <h3>Step-by-Step Guides</h3>
                 <p>Access guides for how to complete different assignments.</p>
+            </div>
+            <div class="feature">
+                <h3>Upcoming Events</h3>
+                <p>Get notified on any upcoming event</p>
+                <a href="view_event.php">Upcoming Events</a>
             </div>
         </section>
     </main>

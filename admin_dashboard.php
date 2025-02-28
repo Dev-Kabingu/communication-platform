@@ -11,6 +11,9 @@
 
     <header>
         <button>Logout</button>
+        <a href="add_notification.php">Add Notification</a>
+        <a href="add_event.php">Add Event</a>
+        <a href="add_announcement.php">Add Announcement</a>
     </header>
 
     <h1>welcome admin</h1>

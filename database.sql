@@ -30,6 +30,16 @@ create table users_credentials (
     created_at datetime not null default current_timestamp
 );
 
+CREATE TABLE users_credentials (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    full_name VARCHAR(100) NOT NULL,
+    email VARCHAR(100) NOT NULL UNIQUE,
+    role ENUM('admin', 'teacher', 'parent') NOT NULL,
+    password VARCHAR(255) NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+
 CREATE TABLE messages (
     id INT AUTO_INCREMENT PRIMARY KEY,
     sender VARCHAR(255),
@@ -60,7 +70,7 @@ CREATE TABLE guides (
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
-use parents_teacher;
+use school_forum_db;
 
 create table files (
    id int AUTO_INCREMENT PRIMARY key,
@@ -68,4 +78,37 @@ create table files (
     filesize int not null,
     filetype varchar(100) not null,
     upload_date timestamp DEFAULT timestamp
+);
+
+-- Create database
+
+USE school_forum_db;
+
+CREATE TABLE announcements (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    title VARCHAR(255) NOT NULL,
+    content TEXT NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TABLE notifications (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    title VARCHAR(255) NOT NULL,
+    message TEXT NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TABLE events (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    event_title VARCHAR(255) NOT NULL,
+    event_date DATE NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+USE school_forum_db;
+CREATE TABLE events (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    event_title VARCHAR(255) NOT NULL,
+    event_description VARCHAR(255) NOT NULL,
+    event_date DATE NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
